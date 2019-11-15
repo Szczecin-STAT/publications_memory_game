@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<meta charset="utf-8">
+
+				<title>Gra Memory</title>
+				<link rel="icon" type="image/png" href="/game/assets/img/favicon.ico" />
+
+        
+
+				<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+				<link rel="stylesheet" href="/game/assets/css/custom.css?v=2019-11-13-08-44-55-+0100">
+				<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+</head>
+
+
+<body>
+
+	
+	<div id="main">
+		<article>
+			<div class="game">
+  <div class="game-score" style="display: none;width: 1790px;margin-left: 30px;">
+    Score panel
+  </div>
+
+	<div class="litery" style="position: absolute;display: none;min-width: 1825px;">
+		<div style="float: left;width: 220px;text-align: center;margin-left: 26px;font-weight: bold;">A</div>
+		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">B</div>
+		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">C</div>
+		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">D</div>
+		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">E</div>
+		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">F</div>
+		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">G</div>
+		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">H</div>
+	</div>
+
+	<div class="cyfry" style="position: absolute;display: none;margin-left: 10px;">
+		<div style="height: 270px;margin-top: 30px;line-height: 290px;font-weight: bold;">1</div>
+		<div style="height: 270px;margin-top: 30px;line-height: 250px;font-weight: bold;">2</div>
+		<div style="height: 270px;margin-top: 30px;line-height: 210px;font-weight: bold;">3</div>
+	</div>
+
+    <div class="game-board" style="display: none;">
+    </div>
+
+    <button class="button game-start" id="start">Rozpocznij grę</button>
+</div>
+
+<script>
+var a=0;
+const memoryGame = {
+    tileCount : 24, //liczba klocków
+    tileOnRow : 8, //liczba klocków na rząd
+    divBoard : null, //div z planszą gry
+    divScore : null, //div z wynikiem gry
+    tiles : [], //tutaj trafi wymieszana tablica klocków
+    tilesChecked : [], //zaznaczone klocki
+    moveCount : 0, //liczba ruchów
+    tilesImg : [ //grafiki dla klocków
+        '/game/assets/img/cards/title_1.png',
+        '/game/assets/img/cards/title_2.png',
+        '/game/assets/img/cards/title_3.png',
+        '/game/assets/img/cards/title_4.png',
+        '/game/assets/img/cards/title_5.png',
+        '/game/assets/img/cards/title_6.png',
+        '/game/assets/img/cards/title_7.png',
+        '/game/assets/img/cards/title_8.png',
+        '/game/assets/img/cards/title_9.png',
+        '/game/assets/img/cards/title_10.png',
+        '/game/assets/img/cards/title_11.png',
+        '/game/assets/img/cards/title_12.png'
+
+    ],
+    canGet : true, //czy można klikać na kafelki
+    tilePairs : 0, //liczba dopasowanych kafelkow
+
+
+    tileClick : function(e) {
+        if (this.canGet) {
+            //jeżeli jeszcze nie pobraliśmy 1 elementu
+            //lub jeżeli index tego elementu nie istnieje w pobranych...
+            if (!this.tilesChecked[0] || (this.tilesChecked[0].dataset.index !== e.target.dataset.index)) {
+                this.tilesChecked.push(e.target);
+                e.target.style.backgroundImage = 'url(' + this.tilesImg[e.target.dataset.cardType] + ')';
+								e.target.style.backgroundSize = 'cover';
+            }
+
+            if (this.tilesChecked.length === 2) {
+                this.canGet = false;
+
+                if (this.tilesChecked[0].dataset.cardType === this.tilesChecked[1].dataset.cardType) {
+                    setTimeout(this.deleteTiles.bind(this), 1200);
+                    a=a+1
+                    this.divScore.innerHTML = "Wynik "+a;
+                } else {
+                    a=a-0.5
+                    setTimeout(this.resetTiles.bind(this), 1200);
+                    this.divScore.innerHTML = "Wynik "+a;
+                }
+
+                this.moveCount++;
+
+            }
+        }
+    },
+
+    deleteTiles : function() {
+        this.tilesChecked[0].remove();
+        this.tilesChecked[1].remove();
+
+        this.canGet = true;
+        this.tilesChecked = [];
+
+        this.tilePairs++;
+        if (this.tilePairs >= this.tileCount / 2) {
+            this.divScore.innerHTML = "Twój wynik: "+a+"! Koniec gry :)";
+        }
+    },
+
+    resetTiles : function() {
+        this.tilesChecked[0].style.backgroundImage = 'url(/game/assets/img/cards/title.png)';
+        this.tilesChecked[1].style.backgroundImage = 'url(/game/assets/img/cards/title.png)';
+
+        this.tilesChecked = [];
+        this.canGet = true;
+    },
+
+    startGame : function() {
+        //czyścimy planszę
+        this.divBoard = document.querySelector('.game-board');
+        this.divBoard.style.display = "block";
+        this.divBoard.innerHTML = '';
+
+        //czyścimy planszę z ruchami
+        this.divScore = document.querySelector('.game-score');
+        this.divScore.style.display = "block";
+        this.divScore.innerHTML = 'Wynik ';
+
+				this.divScore1 = document.querySelector('.litery');
+				this.divScore1.style.display = "block";
+
+				this.divScore2 = document.querySelector('.cyfry');
+				this.divScore2.style.display = "block";
+
+        //czyścimy zmienne (bo gra może się zacząć ponownie)
+        this.tiles = [];
+        this.tilesChecked = [];
+        this.moveCount = 0;
+        this.canGet = true;
+        this.tilePairs = 0;
+
+        //generujemy tablicę numerów kocków (parami)
+        for (let i=0; i<this.tileCount; i++) {
+            this.tiles.push(Math.floor(i/2));
+        }
+
+        //i ją mieszamy
+        for (let i=this.tileCount-1; i>0; i--) {
+            const swap = Math.floor(Math.random()*i);
+            const tmp = this.tiles[i];
+            this.tiles[i] = this.tiles[swap];
+            this.tiles[swap] = tmp;
+        }
+
+        for (let i=0; i<this.tileCount; i++) {
+            const tile = document.createElement('div');
+            tile.classList.add("game-tile");
+            this.divBoard.appendChild(tile);
+
+            tile.dataset.cardType = this.tiles[i];
+            tile.dataset.index = i;
+
+            tile.style.left = (tile.offsetWidth+5) * (i%this.tileOnRow) + 'px'
+            tile.style.top = (tile.offsetHeight+5) * (Math.floor(i/this.tileOnRow)) + 'px';
+
+            tile.addEventListener('click', this.tileClick.bind(this));
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.game-start').addEventListener('click', function() {
+        memoryGame.startGame();
+				this.style.display = "none";
+    });
+});
+</script>
+
+		</article>
+		<footer>
+
+</footer>
+
+
+</div>
+</body>
+
+</html>
