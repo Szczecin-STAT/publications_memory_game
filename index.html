@@ -8,20 +8,20 @@ layout: default
   </div>
 
 	<div class="litery" style="position: absolute;display: none;min-width: 1825px;">
-		<div style="float: left;width: 220px;text-align: center;margin-left: 26px;font-weight: bold;">A</div>
-		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">B</div>
-		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">C</div>
-		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">D</div>
-		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">E</div>
-		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">F</div>
-		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">G</div>
-		<div style="float: left;width: 220px;text-align: center;margin-left: 5px;font-weight: bold;">H</div>
+		<div class="poj_lit" style="margin-left: 26px;">A</div>
+		<div class="poj_lit" style="margin-left: 5px;">B</div>
+		<div class="poj_lit" style="margin-left: 5px;">C</div>
+		<div class="poj_lit" style="margin-left: 5px;">D</div>
+		<div class="poj_lit" style="margin-left: 5px;">E</div>
+		<div class="poj_lit" style="margin-left: 5px;">F</div>
+		<div class="poj_lit" style="margin-left: 5px;">G</div>
+		<div class="poj_lit" style="margin-left: 5px;">H</div>
 	</div>
 
-	<div class="cyfry" style="position: absolute;display: none;margin-left: 10px;">
-		<div style="height: 270px;margin-top: 30px;line-height: 290px;font-weight: bold;">1</div>
-		<div style="height: 270px;margin-top: 30px;line-height: 250px;font-weight: bold;">2</div>
-		<div style="height: 270px;margin-top: 30px;line-height: 210px;font-weight: bold;">3</div>
+	<div class="cyfry" style="display: none;">
+		<div class="poj_cyf" style="line-height: 290px;">1</div>
+		<div class="poj_cyf" style="line-height: 250px;">2</div>
+		<div class="poj_cyf" style="line-height: 210px;">3</div>
 	</div>
 
     <div class="game-board" style="display: none;">
@@ -29,6 +29,11 @@ layout: default
 
     <button class="button game-start" id="start">Rozpocznij grę</button>
 </div>
+
+<div class="stopka" style="display: none;margin-left: 30px;font-size: 14px;">
+  <a>Projekt i wykonanie:
+  <br/>Ośrodek Inżynierii Danych w Szczecinie</a>
+  </div>
 
 <script>
 var a=0;
@@ -116,6 +121,9 @@ const memoryGame = {
         this.divBoard.innerHTML = '';
 
         //czyścimy planszę z ruchami
+        this.divScore3 = document.querySelector('.stopka');
+        this.divScore3.style.display = "block";
+
         this.divScore = document.querySelector('.game-score');
         this.divScore.style.display = "block";
         this.divScore.innerHTML = 'Wynik ';
